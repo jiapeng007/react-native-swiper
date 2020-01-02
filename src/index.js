@@ -471,6 +471,11 @@ export default class extends Component {
     if (!this.internals.offset)
       // Android not setting this onLayout first? https://github.com/leecade/react-native-swiper/issues/582
       this.internals.offset = {}
+    
+    // When this.internals.offset is {}, diff will be NaN, so index will not be updated.
+    if (!this.internals.offset[dir])
+      this.internals.offset[dir] = dir === 'y' ? state.height * index : state.width * index
+    
     const diff = offset[dir] - this.internals.offset[dir]
     const step = dir === 'x' ? state.width : state.height
     let loopJump = false
